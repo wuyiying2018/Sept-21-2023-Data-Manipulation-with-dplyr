@@ -330,3 +330,105 @@ filter(litters_data, group %in% c("Con7","Con8"),gd0_weight>20)
     ## 4 Con8  #3/5/2/2/95         28.5        NA            20               8
     ## 5 Con8  #5/4/3/83/3         28          NA            19               9
     ## # ℹ 2 more variables: pups_dead_birth <int>, pups_survive <int>
+
+what about missing rows? drop NAs in the whole dataset
+
+``` r
+drop_na(litters_data)
+```
+
+    ## # A tibble: 31 × 8
+    ##   group litter_number gd0_weight gd18_weight gd_of_birth pups_born_alive
+    ##   <chr> <chr>              <dbl>       <dbl>       <int>           <int>
+    ## 1 Con7  #85                 19.7        34.7          20               3
+    ## 2 Con7  #1/2/95/2           27          42            19               8
+    ## 3 Con7  #5/5/3/83/3-3       26          41.4          19               6
+    ## # ℹ 28 more rows
+    ## # ℹ 2 more variables: pups_dead_birth <int>, pups_survive <int>
+
+drop NAs in specific col
+
+``` r
+drop_na(litters_data,gd0_weight)
+```
+
+    ## # A tibble: 34 × 8
+    ##   group litter_number gd0_weight gd18_weight gd_of_birth pups_born_alive
+    ##   <chr> <chr>              <dbl>       <dbl>       <int>           <int>
+    ## 1 Con7  #85                 19.7        34.7          20               3
+    ## 2 Con7  #1/2/95/2           27          42            19               8
+    ## 3 Con7  #5/5/3/83/3-3       26          41.4          19               6
+    ## # ℹ 31 more rows
+    ## # ℹ 2 more variables: pups_dead_birth <int>, pups_survive <int>
+
+## `mutate`
+
+this is used to add or change variables
+
+`group=str_to_lower(variable1)` is going to convert the data in
+`variable1` into lowercases
+
+``` r
+mutate(litters_data,
+  wt_gain = gd18_weight - gd0_weight,
+  group = str_to_lower(group)
+)
+```
+
+    ## # A tibble: 49 × 9
+    ##   group litter_number gd0_weight gd18_weight gd_of_birth pups_born_alive
+    ##   <chr> <chr>              <dbl>       <dbl>       <int>           <int>
+    ## 1 con7  #85                 19.7        34.7          20               3
+    ## 2 con7  #1/2/95/2           27          42            19               8
+    ## 3 con7  #5/5/3/83/3-3       26          41.4          19               6
+    ## # ℹ 46 more rows
+    ## # ℹ 3 more variables: pups_dead_birth <int>, pups_survive <int>, wt_gain <dbl>
+
+## `arrange`
+
+arrange in ascending order by gd0_weight
+
+``` r
+arrange(litters_data,gd0_weight)
+```
+
+    ## # A tibble: 49 × 8
+    ##   group litter_number gd0_weight gd18_weight gd_of_birth pups_born_alive
+    ##   <chr> <chr>              <dbl>       <dbl>       <int>           <int>
+    ## 1 Mod7  #59                 17          33.4          19               8
+    ## 2 Mod7  #62                 19.5        35.9          19               7
+    ## 3 Con7  #85                 19.7        34.7          20               3
+    ## # ℹ 46 more rows
+    ## # ℹ 2 more variables: pups_dead_birth <int>, pups_survive <int>
+
+arrange in alphabetical order by group then by gd0_weight
+
+``` r
+arrange(litters_data,group,gd0_weight)
+```
+
+    ## # A tibble: 49 × 8
+    ##   group litter_number gd0_weight gd18_weight gd_of_birth pups_born_alive
+    ##   <chr> <chr>              <dbl>       <dbl>       <int>           <int>
+    ## 1 Con7  #85                 19.7        34.7          20               3
+    ## 2 Con7  #5/5/3/83/3-3       26          41.4          19               6
+    ## 3 Con7  #1/2/95/2           27          42            19               8
+    ## # ℹ 46 more rows
+    ## # ℹ 2 more variables: pups_dead_birth <int>, pups_survive <int>
+
+## pipes
+
+Note that by default RStudio will insert the “traditional” pipe `%>%`,
+and you can update to the native in pipe through Global Preferences \>
+Code \> Use Native Pipe Operator.
+
+``` r
+litters_data = 
+  read_csv("./data/FAS_litters.csv", col_types = "ccddiiii") |> 
+  janitor::clean_names() |> 
+  select(-pups_survive) |> 
+  mutate(
+    wt_gain = gd18_weight - gd0_weight,
+    group = str_to_lower(group)) |> 
+  drop_na(wt_gain)
+```

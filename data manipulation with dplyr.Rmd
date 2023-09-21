@@ -93,3 +93,51 @@ filter(litters_data, !(group=="Con7"))
 filter(litters_data, group %in% c("Con7","Con8"),gd0_weight>20)
 ```
 
+what about missing rows?
+drop NAs in the whole dataset
+```{r}
+drop_na(litters_data)
+```
+drop NAs in specific col
+```{r}
+drop_na(litters_data,gd0_weight)
+```
+
+
+
+## `mutate`
+this is used to add or change variables
+
+`group=str_to_lower(variable1)` is going to convert the data in `variable1` into lowercases
+
+```{r}
+mutate(litters_data,
+  wt_gain = gd18_weight - gd0_weight,
+  group = str_to_lower(group)
+)
+```
+
+
+## `arrange`
+arrange in ascending order by gd0_weight
+```{r}
+arrange(litters_data,gd0_weight)
+```
+arrange in alphabetical order by group then by gd0_weight
+```{r}
+arrange(litters_data,group,gd0_weight)
+```
+
+## pipes
+Note that by default RStudio will insert the “traditional” pipe `%>%`, and you can update to the native in pipe through Global Preferences > Code > Use Native Pipe Operator. 
+```{r}
+litters_data = 
+  read_csv("./data/FAS_litters.csv", col_types = "ccddiiii") |> 
+  janitor::clean_names() |> 
+  select(-pups_survive) |> 
+  mutate(
+    wt_gain = gd18_weight - gd0_weight,
+    group = str_to_lower(group)) |> 
+  drop_na(wt_gain)
+```
+
