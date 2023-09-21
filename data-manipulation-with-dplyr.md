@@ -3,33 +3,33 @@ Data Manipulation with dplyr
 Yiying Wu
 2023-09-21
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax
-for authoring HTML, PDF, and MS Word documents. For more details on
-using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that
-includes both content as well as the output of any embedded R code
-chunks within the document. You can embed an R code chunk like this:
+## tidyverse
 
 ``` r
-summary(cars)
+library(tidyverse)
 ```
 
-    ##      speed           dist       
-    ##  Min.   : 4.0   Min.   :  2.00  
-    ##  1st Qu.:12.0   1st Qu.: 26.00  
-    ##  Median :15.0   Median : 36.00  
-    ##  Mean   :15.4   Mean   : 42.98  
-    ##  3rd Qu.:19.0   3rd Qu.: 56.00  
-    ##  Max.   :25.0   Max.   :120.00
+    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ## ✔ dplyr     1.1.2     ✔ readr     2.1.4
+    ## ✔ forcats   1.0.0     ✔ stringr   1.5.0
+    ## ✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+    ## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+    ## ✔ purrr     1.0.1     
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 
-## Including Plots
+## import data
 
-You can also embed plots, for example:
+``` r
+options(tibble.print_min = 3)
 
-![](data-manipulation-with-dplyr_files/figure-gfm/pressure-1.png)<!-- -->
+litters_data = read_csv("./data/FAS_litters.csv",
+  col_types = "ccddiiii")
+litters_data = janitor::clean_names(litters_data)
 
-Note that the `echo = FALSE` parameter was added to the code chunk to
-prevent printing of the R code that generated the plot.
+pups_data = read_csv("./data/FAS_pups.csv",
+  col_types = "ciiiii")
+pups_data = janitor::clean_names(pups_data)
+```
