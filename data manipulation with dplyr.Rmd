@@ -128,8 +128,10 @@ arrange in alphabetical order by group then by gd0_weight
 arrange(litters_data,group,gd0_weight)
 ```
 
-## pipes
+## pipes `|>`
+The easiest way to read |> is “then”; the keyboard shortcuts are Ctrl + Shift + M (Windows) and Cmd + Shift + M (Mac). 
 Note that by default RStudio will insert the “traditional” pipe `%>%`, and you can update to the native in pipe through Global Preferences > Code > Use Native Pipe Operator. 
+
 ```{r}
 litters_data = 
   read_csv("./data/FAS_litters.csv", col_types = "ccddiiii") |> 
@@ -138,6 +140,15 @@ litters_data =
   mutate(
     wt_gain = gd18_weight - gd0_weight,
     group = str_to_lower(group)) |> 
-  drop_na(wt_gain)
+  drop_na(wt_gain)|>
+  arrange(group,wt_gain)
 ```
+
+### `|>` vs `%>%`
+There are some subtle differences between `|>` and `%>%` that it can be helpful to read about, but in the vast majority of cases these are effectively interchangeable. While the similarities and differences can matter, there are a few points that are likely to come up more often:
+
+* You’ll see `%>%` a lot in code online. It was introduced first, and was very prevalent in tidyverse code for a long time before `|>` came along.
+* The native pipe |> was introduced in R 4.1.0, and it changed some in 4.2.0 and 4.3.0; it’s pretty stable now and the main functionality is unlikely to change, but it won’t be familiar to everyone and can’t be used at all in older versions of R.
+
+
 
