@@ -15,6 +15,8 @@ library(tidyverse)
 ```
 
 ## import data
+Import FAS litters and pups.
+
 ```{r}
 options(tibble.print_min = 3)
 
@@ -25,5 +27,55 @@ litters_data = janitor::clean_names(litters_data)
 pups_data = read_csv("./data/FAS_pups.csv",
   col_types = "ciiiii")
 pups_data = janitor::clean_names(pups_data)
+```
+
+
+## `select`
+`select` is used to select columns
+```{r}
+select(litters_data, group, litter_number, gd0_weight, pups_born_alive)
+```
+
+`starts_with` select the cols starts with what you want:
+
+```{r}
+select(litters_data, group, starts_with("pups"))
+```
+
+specify the specify a range of columns to keep:
+```{r}
+select(litters_data, group:gd_of_birth)
+```
+
+You can also specify columns you’d like to remove:
+```{r}
+select(litters_data, -pups_survive)
+```
+
+You can rename variables as part of this process:
+```{r}
+select(litters_data, GROUP = group, LiTtEr_NuMbEr = litter_number)
+```
+
+`everything()`keep everything
+`select` can select the cols in the order you write them
+```{r}
+select(litters_data, group, gd0_weight, everything())
+```
+`rename` function: change col names
+```{r}
+rename(litters_data,litter_id=litter_number)
+```
+`relocate` put the cols into the order you want
+```{r}
+relocate(litters_data,litter_id=litter_number)
+```
+
+
+
+`select` vs `pull`
+```{r}
+select(litters_data,group)
+pull(litters_data,group)
 ```
 
